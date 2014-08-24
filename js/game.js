@@ -10,16 +10,10 @@ GameState.prototype.preload = function() {
 
 var clear;
 var previous;
+var rlrbdr;
 
 GameState.prototype.create = function() {
-  this.game.stage.backgroundColor = 0x333333;
-
-  var date = "February 1st 2014"
-  var style = { font: "40px Arial", fill: "#9CA2B8" };
-  var tdate = game.add.text(10, 10, date, style);
-
-  previus = game.add.button(10, 65, 'previous');
-  clear = game.add.button(10, 110, 'clear');
+  this.setup();
 };
 
 GameState.prototype.update = function() {
@@ -28,3 +22,17 @@ GameState.prototype.update = function() {
 // Setup game
 var game = new Phaser.Game(1136, 640, Phaser.AUTO);
 game.state.add('game', GameState, true);
+
+GameState.prototype.setup = function()  {
+  this.game.stage.backgroundColor = 0x333333;
+
+  var date = "February 1st 2014"
+  var style = { font: "40px Arial", fill: "#9CA2B8" };
+  var tdate = game.add.text(10, 10, date, style);
+
+  previus = game.add.button(10, 65, 'previous');
+  clear = game.add.button(10, 110, 'clear');
+
+  rlrbdr = new Phaser.Line(0, game.height - 20, game.width, game.height - 20);
+  rlrbdr.lineStyle(2, "#9CA2B8", 1);
+}
