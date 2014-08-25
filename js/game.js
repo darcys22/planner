@@ -33,6 +33,19 @@ GameState.prototype.setup = function()  {
   previus = game.add.button(10, 65, 'previous');
   clear = game.add.button(10, 110, 'clear');
 
-  rlrbdr = new Phaser.Line(0, game.height - 20, game.width, game.height - 20);
-  rlrbdr.lineStyle(2, "#9CA2B8", 1);
+  this.ruler();
+
+}
+
+GameState.prototype.ruler = function() {
+  bmd = game.make.bitmapData(game.width, game.height);
+  bmd.ctx.strokeStyle = '#ffffff';
+  rlr = game.add.sprite(0, game.height - 30, bmd);
+  bmd.ctx.beginPath();
+  bmd.ctx.moveTo(0, game.height - 30 );
+  bmd.ctx.lineTo(game.width, game.height - 30);
+  bmd.ctx.lineWidth = 4;
+  bmd.ctx.stroke();
+  bmd.ctx.closePath();
+  bmd.render();
 }
