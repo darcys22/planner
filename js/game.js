@@ -10,7 +10,6 @@ GameState.prototype.preload = function() {
 
 var clear;
 var previous;
-var rlrbdr;
 
 GameState.prototype.create = function() {
   this.setup();
@@ -38,14 +37,12 @@ GameState.prototype.setup = function()  {
 }
 
 GameState.prototype.ruler = function() {
-  bmd = game.make.bitmapData(game.width, game.height);
-  bmd.ctx.strokeStyle = '#ffffff';
-  rlr = game.add.sprite(0, game.height - 30, bmd);
-  bmd.ctx.beginPath();
-  bmd.ctx.moveTo(0, game.height - 30 );
-  bmd.ctx.lineTo(game.width, game.height - 30);
-  bmd.ctx.lineWidth = 4;
-  bmd.ctx.stroke();
-  bmd.ctx.closePath();
-  bmd.render();
+  var rlrbdr = game.add.graphics(0, 0);
+
+  rlrbdr.lineStyle(5, 0x9CA2B8);
+  rlrbdr.moveTo(0,game.height - 50);
+  rlrbdr.lineTo(game.width,game.height - 50);
+
+  rlrbdr.drawRect(71,400, 71,40);
+  rlrbdr.drawRect(71,300, 71*4,40);
 }
