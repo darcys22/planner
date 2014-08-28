@@ -24,6 +24,8 @@ game.state.add('game', GameState, true);
 
 GameState.prototype.setup = function()  {
   this.game.stage.backgroundColor = 0x333333;
+  this.game.physics.startSystem(Phaser.Physics.ARCADE);
+  this.game.physics.arcade.gravity.y = 200;
 
   var date = "February 1st 2014"
   var style = { font: "40px Arial", fill: "#9CA2B8" };
@@ -44,5 +46,9 @@ GameState.prototype.ruler = function() {
   rlrbdr.lineTo(game.width,game.height - 50);
 
   rlrbdr.drawRect(71,400, 71,40);
-  rlrbdr.drawRect(71,300, 71*4,40);
+  var box = rlrbdr.drawRect(71,300, 71*4,40);
+
+  game.physics.arcade.enable(box);
+  box.inputEnabled = true;
+  box.input.enableDrag();
 }
