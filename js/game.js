@@ -39,16 +39,28 @@ GameState.prototype.setup = function()  {
 }
 
 GameState.prototype.ruler = function() {
-  var rlrbdr = game.add.graphics(0, 0);
 
+  var rlrbdr = this.game.add.graphics(0, 0);
   rlrbdr.lineStyle(5, 0x9CA2B8);
   rlrbdr.moveTo(0,game.height - 50);
   rlrbdr.lineTo(game.width,game.height - 50);
 
-  rlrbdr.drawRect(71,400, 71,40);
-  var box = rlrbdr.drawRect(71,300, 71*4,40);
+  this.floor = this.game.add.sprite(0,0);
+  this.floor.addChild(rlrbdr);
+  game.physics.enable(this.floor, Phaser.Physics.ARCADE);
 
-  game.physics.arcade.enable(box);
-  box.inputEnabled = true;
-  box.input.enableDrag();
+  this.box();
+
+}
+
+GameState.prototype.box = function() {
+  var bmd = this.game.add.bitmapData(this.game.width, this.game.height);
+  bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
+  bmd.context.fillRect(71,300, 71*4,40);
+  this.box = this.game.add.sprite(0,0,bmd);
+
+  game.physics.arcade.enable(this.box);
+  this.box.body.collideWorldBounds = true;
+  this.box.inputEnabled = true;
+  this.box.input.enableDrag();
 }
