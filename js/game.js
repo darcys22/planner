@@ -16,6 +16,7 @@ GameState.prototype.create = function() {
 };
 
 GameState.prototype.update = function() {
+  game.physics.arcade.collide(this.box,this.floor);
 };
 
 // Setup game
@@ -34,22 +35,24 @@ GameState.prototype.setup = function()  {
   previus = game.add.button(10, 65, 'previous');
   clear = game.add.button(10, 110, 'clear');
 
+  this.box();
   this.ruler();
 
 }
 
 GameState.prototype.ruler = function() {
 
-  var rlrbdr = this.game.add.graphics(0, 0);
+  var rlrbdr = this.game.add.graphics(0,0);
   rlrbdr.lineStyle(5, 0x9CA2B8);
-  rlrbdr.moveTo(0,game.height - 50);
-  rlrbdr.lineTo(game.width,game.height - 50);
+  rlrbdr.moveTo(0,0);
+  rlrbdr.lineTo(game.width,0);
 
-  this.floor = this.game.add.sprite(0,0);
+  this.floor = this.game.add.sprite(0,this.game.height-50);
   this.floor.addChild(rlrbdr);
   game.physics.enable(this.floor, Phaser.Physics.ARCADE);
+  this.floor.body.immovable = true;
+  this.floor.body.moves = false;
 
-  this.box();
 
 }
 
@@ -60,7 +63,11 @@ GameState.prototype.box = function() {
   this.box = this.game.add.sprite(0,0,bmd);
 
   game.physics.arcade.enable(this.box);
-  this.box.body.collideWorldBounds = true;
   this.box.inputEnabled = true;
   this.box.input.enableDrag();
+}
+
+GameState.prototype.render = function() {
+  this.game.debug.body(this.box);
+  this.game.debug.body(this.floor);
 }
