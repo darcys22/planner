@@ -18,10 +18,6 @@ GameState.prototype.create = function() {
 GameState.prototype.update = function() {
   game.physics.arcade.collide(this.shifts,this.floor);
 
-  if (game.input.activePointer.isDown)
-    {
-      this.box(game.input.activePointer.x, game.input.activePointer.y, 4);
-    }
   
 };
 
@@ -34,17 +30,24 @@ GameState.prototype.setup = function()  {
   this.game.physics.startSystem(Phaser.Physics.ARCADE);
   this.game.physics.arcade.gravity.y = 200;
   this.shifts = this.game.add.group();
-
-  var date = "February 1st 2014"
-  var style = { font: "40px Arial", fill: "#9CA2B8" };
-  var tdate = game.add.text(10, 10, date, style);
-
-  previus = game.add.button(10, 65, 'previous');
-  clear = game.add.button(10, 110, 'clear');
+  //this.game.input.onDown.add(this.shift(), this);
 
   this.box(71, 300, 4);
   this.ruler();
 
+}
+
+GameState.prototype.buttons = function() {
+  var date = "February 1st 2014"
+  var style = { font: "40px Arial", fill: "#9CA2B8" };
+  var tdate = game.add.text(10, 10, date, style);
+
+  previus = this.game.add.button(10, 65, 'previous');
+  clear = this.game.add.button(10, 110, 'clear');
+}
+
+GameState.prototype.shift = function() {
+  this.box(this.game.input.x, this.game.input.y, 4);
 }
 
 GameState.prototype.ruler = function() {
@@ -63,14 +66,12 @@ GameState.prototype.ruler = function() {
   this.floor.body.immovable = true;
   this.floor.body.moves = false;
 
-
 }
 
 GameState.prototype.box = function(x, y, size) {
   var bmd = this.game.add.bitmapData(71*size, 40);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
-  //bmd.context.fillRect(0,0, bmd.width,bmd.height);
   var box = this.game.add.sprite(x,y,bmd);
 
   game.physics.arcade.enable(box);
@@ -78,7 +79,17 @@ GameState.prototype.box = function(x, y, size) {
   box.input.enableDrag();
   box.input.enableSnap(32,32,true,true);
 
+  box.events.onDragStart.add(this.startDrag(box), this);
+  box.events.onDragStop.add(this.stopDrag(box), this);
+
   this.shifts.add(box);
+}
+
+GameState.prototype.startDrag = function(sprite) {
+  sprite.body.moves = false;
+}
+GameState.prototype.stopDrag = function(sprite) {
+  sprite.body.moves = true;
 }
 
 GameState.prototype.render = function() {
