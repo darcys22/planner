@@ -35,20 +35,20 @@ GameState.prototype.setup = function()  {
   previus = game.add.button(10, 65, 'previous');
   clear = game.add.button(10, 110, 'clear');
 
-  this.box();
+  this.box(4);
   this.ruler();
 
 }
 
 GameState.prototype.ruler = function() {
 
-  var rlrbdr = this.game.add.graphics(0,0);
+  var rlrbdr = this.game.add.bitmapData(this.game.width, 50);
+  //rlrbdr context is a html5 canvas context so what you draw with that yeah
   rlrbdr.lineStyle(5, 0x9CA2B8);
   rlrbdr.moveTo(0,0);
   rlrbdr.lineTo(game.width,0);
 
-  this.floor = this.game.add.sprite(0,this.game.height-50);
-  this.floor.addChild(rlrbdr);
+  this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
   game.physics.enable(this.floor, Phaser.Physics.ARCADE);
   this.floor.body.immovable = true;
   this.floor.body.moves = false;
@@ -56,11 +56,11 @@ GameState.prototype.ruler = function() {
 
 }
 
-GameState.prototype.box = function() {
-  var bmd = this.game.add.bitmapData(this.game.width, this.game.height);
+GameState.prototype.box = function(size) {
+  var bmd = this.game.add.bitmapData(71*size, 40);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
-  bmd.context.fillRect(71,300, 71*4,40);
-  this.box = this.game.add.sprite(0,0,bmd);
+  bmd.context.fillRect(0,0, bmd.width,bmd.height);
+  this.box = this.game.add.sprite(71,300,bmd);
 
   game.physics.arcade.enable(this.box);
   this.box.inputEnabled = true;
@@ -68,6 +68,6 @@ GameState.prototype.box = function() {
 }
 
 GameState.prototype.render = function() {
-  this.game.debug.body(this.box);
+  //this.game.debug.body(this.box);
   this.game.debug.body(this.floor);
 }
