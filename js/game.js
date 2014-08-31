@@ -16,7 +16,13 @@ GameState.prototype.create = function() {
 };
 
 GameState.prototype.update = function() {
-  game.physics.arcade.collide(this.box,this.floor);
+  game.physics.arcade.collide(this.shifts,this.floor);
+
+  if (game.input.activePointer.isDown)
+    {
+      this.box(game.input.activePointer.x, game.input.activePointer.y, 4);
+    }
+  
 };
 
 // Setup game
@@ -27,6 +33,7 @@ GameState.prototype.setup = function()  {
   this.game.stage.backgroundColor = 0x333333;
   this.game.physics.startSystem(Phaser.Physics.ARCADE);
   this.game.physics.arcade.gravity.y = 200;
+  this.shifts = this.game.add.group();
 
   var date = "February 1st 2014"
   var style = { font: "40px Arial", fill: "#9CA2B8" };
@@ -64,11 +71,14 @@ GameState.prototype.box = function(x, y, size) {
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
   //bmd.context.fillRect(0,0, bmd.width,bmd.height);
-  this.box = this.game.add.sprite(x,y,bmd);
+  var box = this.game.add.sprite(x,y,bmd);
 
-  game.physics.arcade.enable(this.box);
-  this.box.inputEnabled = true;
-  this.box.input.enableDrag();
+  game.physics.arcade.enable(box);
+  box.inputEnabled = true;
+  box.input.enableDrag();
+  box.input.enableSnap(32,32,true,true);
+
+  this.shifts.add(box);
 }
 
 GameState.prototype.render = function() {
