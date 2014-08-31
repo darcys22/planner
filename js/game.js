@@ -35,7 +35,7 @@ GameState.prototype.setup = function()  {
   previus = game.add.button(10, 65, 'previous');
   clear = game.add.button(10, 110, 'clear');
 
-  this.box(4);
+  this.box(71, 300, 4);
   this.ruler();
 
 }
@@ -44,9 +44,12 @@ GameState.prototype.ruler = function() {
 
   var rlrbdr = this.game.add.bitmapData(this.game.width, 50);
   //rlrbdr context is a html5 canvas context so what you draw with that yeah
-  rlrbdr.lineStyle(5, 0x9CA2B8);
-  rlrbdr.moveTo(0,0);
-  rlrbdr.lineTo(game.width,0);
+  rlrbdr.ctx.strokeStyle = "#9CA2B8";
+  rlrbdr.ctx.lineWidth=5;
+  rlrbdr.ctx.beginPath();
+  rlrbdr.ctx.moveTo(0,0);
+  rlrbdr.ctx.lineTo(game.width,0);
+  rlrbdr.ctx.stroke();
 
   this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
   game.physics.enable(this.floor, Phaser.Physics.ARCADE);
@@ -56,11 +59,12 @@ GameState.prototype.ruler = function() {
 
 }
 
-GameState.prototype.box = function(size) {
+GameState.prototype.box = function(x, y, size) {
   var bmd = this.game.add.bitmapData(71*size, 40);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
-  bmd.context.fillRect(0,0, bmd.width,bmd.height);
-  this.box = this.game.add.sprite(71,300,bmd);
+  roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
+  //bmd.context.fillRect(0,0, bmd.width,bmd.height);
+  this.box = this.game.add.sprite(x,y,bmd);
 
   game.physics.arcade.enable(this.box);
   this.box.inputEnabled = true;
@@ -68,6 +72,43 @@ GameState.prototype.box = function(size) {
 }
 
 GameState.prototype.render = function() {
-  //this.game.debug.body(this.box);
-  this.game.debug.body(this.floor);
+}
+
+/**
+ * Draws a rounded rectangle using the current state of the canvas. 
+ * If you omit the last three params, it will draw a rectangle 
+ * outline with a 5 pixel border radius 
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Number} x The top left x coordinate
+ * @param {Number} y The top left y coordinate 
+ * @param {Number} width The width of the rectangle 
+ * @param {Number} height The height of the rectangle
+ * @param {Number} radius The corner radius. Defaults to 5;
+ * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
+ * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
+ */
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke == "undefined" ) {
+    stroke = true;
+  }
+  if (typeof radius === "undefined") {
+    radius = 5;
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (stroke) {
+    ctx.stroke();
+  }
+  if (fill) {
+    ctx.fill();
+  }        
 }
