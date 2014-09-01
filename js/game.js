@@ -1,6 +1,3 @@
-// Copyright © 2014 Demircan Celebi
-// Licensed under the terms of the MIT License
-
 var GameState = function(game) {};
 
 GameState.prototype.preload = function() {
@@ -17,9 +14,11 @@ GameState.prototype.create = function() {
 
 GameState.prototype.update = function() {
   game.physics.arcade.collide(this.shifts,this.floor);
-
-  
 };
+
+GameState.prototype.render = function() {
+}
+
 
 // Setup game
 var game = new Phaser.Game(1136, 640, Phaser.AUTO);
@@ -79,21 +78,19 @@ GameState.prototype.box = function(x, y, size) {
   box.input.enableDrag();
   box.input.enableSnap(32,32,true,true);
 
-  box.events.onDragStart.add(this.startDrag(box), this);
+  box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag(box), this);
 
   this.shifts.add(box);
 }
 
-GameState.prototype.startDrag = function(sprite) {
-  sprite.body.moves = false;
+GameState.prototype.startDrag = function() {
+  //sprite.body.moves = false;
 }
 GameState.prototype.stopDrag = function(sprite) {
   sprite.body.moves = true;
 }
 
-GameState.prototype.render = function() {
-}
 
 /**
  * Draws a rounded rectangle using the current state of the canvas. 
