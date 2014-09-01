@@ -33,6 +33,7 @@ GameState.prototype.setup = function()  {
 
   this.box(71, 300, 4);
   this.ruler();
+  this.buttons();
 
 }
 
