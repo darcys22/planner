@@ -14,13 +14,20 @@ GameState.prototype.create = function() {
 
 GameState.prototype.update = function() {
   game.physics.arcade.collide(this.shifts,this.floor);
+  game.physics.arcade.collide(this.shifts);
 };
 
 GameState.prototype.render = function() {
 }
 
 
-// Setup game
+/////////////////////////// Setup game
+////////////////////////////////////////////////
+//
+//
+//
+
+
 var game = new Phaser.Game(1136, 640, Phaser.AUTO);
 game.state.add('game', GameState, true);
 
@@ -29,25 +36,12 @@ GameState.prototype.setup = function()  {
   this.game.physics.startSystem(Phaser.Physics.ARCADE);
   this.game.physics.arcade.gravity.y = 200;
   this.shifts = this.game.add.group();
-  //this.game.input.onDown.add(this.shift(), this);
+  this.game.input.onDown.add(this.shiftAdd, this);
 
   this.box(71, 300, 4);
   this.ruler();
   this.buttons();
 
-}
-
-GameState.prototype.buttons = function() {
-  var date = "February 1st 2014"
-  var style = { font: "40px Arial", fill: "#9CA2B8" };
-  var tdate = game.add.text(10, 10, date, style);
-
-  previus = this.game.add.button(10, 65, 'previous');
-  clear = this.game.add.button(10, 110, 'clear');
-}
-
-GameState.prototype.shift = function() {
-  this.box(this.game.input.x, this.game.input.y, 4);
 }
 
 GameState.prototype.ruler = function() {
@@ -79,17 +73,41 @@ GameState.prototype.box = function(x, y, size) {
   box.input.enableDrag();
   box.input.enableSnap(32,32,true,true);
 
+  box.body.collideWorldBounds = true;
+  //box.body.immovable = true;
+
   box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag, this);
 
   this.shifts.add(box);
 }
 
+
+
+
+////////////////////////////////////////////////
+//
+////////// Probably dont need to touch again
+//
+//
+//
+
+GameState.prototype.shiftAdd = function(sprite, pointer) {
+  this.box(this.game.input.x, this.game.input.y, 4);
+}
 GameState.prototype.startDrag = function(sprite, pointer) {
   sprite.body.moves = false;
 }
 GameState.prototype.stopDrag = function(sprite, pointer) {
   sprite.body.moves = true;
+}
+GameState.prototype.buttons = function() {
+  var date = "February 1st 2014"
+  var style = { font: "40px Arial", fill: "#9CA2B8" };
+  var tdate = game.add.text(10, 10, date, style);
+
+  previus = this.game.add.button(10, 65, 'previous');
+  clear = this.game.add.button(10, 110, 'clear');
 }
 
 
