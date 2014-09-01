@@ -79,15 +79,15 @@ GameState.prototype.box = function(x, y, size) {
   box.input.enableSnap(32,32,true,true);
 
   box.events.onDragStart.add(this.startDrag, this);
-  box.events.onDragStop.add(this.stopDrag(box), this);
+  box.events.onDragStop.add(this.stopDrag, this);
 
   this.shifts.add(box);
 }
 
-GameState.prototype.startDrag = function() {
-  //sprite.body.moves = false;
+GameState.prototype.startDrag = function(sprite, pointer) {
+  sprite.body.moves = false;
 }
-GameState.prototype.stopDrag = function(sprite) {
+GameState.prototype.stopDrag = function(sprite, pointer) {
   sprite.body.moves = true;
 }
 
