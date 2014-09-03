@@ -15,6 +15,8 @@ GameState.prototype.create = function() {
 GameState.prototype.update = function() {
   game.physics.arcade.collide(this.shifts,this.floor);
   game.physics.arcade.collide(this.shifts);
+
+  
 };
 
 GameState.prototype.render = function() {
@@ -74,18 +76,12 @@ GameState.prototype.box = function(x, y, size) {
   box.input.enableSnap(71/2,40,true,false);
 
   box.body.collideWorldBounds = true;
-  box.body.mass = 10;
-  //box.body.immovable = true;
-  //box.body.customSeparateX = true;
-  //box.body.customSeparateY = true;
 
   box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag, this);
 
   this.shifts.add(box);
 }
-
-
 
 
 ////////////////////////////////////////////////
