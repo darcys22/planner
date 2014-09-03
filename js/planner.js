@@ -17,13 +17,13 @@ GameState.prototype.update = function() {
     {
       this.boxTween.stop();
       this.shifts.add(this.fallingShift);
-      this.fallingShift = null;
+      this.fallingShift = false;
     }
 
 
   if (game.input.mousePointer.justReleased()) 
     {
-      if (this.fallingShift = null)
+      if (this.fallingShift)
         {
           this.shiftAdd(null,null);
         }
