@@ -13,12 +13,22 @@ GameState.prototype.create = function() {
 };
 
 GameState.prototype.update = function() {
-  if (checkOverlap())
+  if (this.checkOverlap())
     {
       this.boxTween.stop();
       this.shifts.add(this.fallingShift);
       this.fallingShift = null;
     }
+
+
+  if (game.input.mousePointer.justReleased()) 
+    {
+      if (this.fallingShift = null)
+        {
+          this.shiftAdd(null,null);
+        }
+    }
+    
   
 };
 
@@ -90,7 +100,7 @@ GameState.prototype.box = function(x, y, size) {
 
 GameState.prototype.checkOverlap = function() {
 
-    var boundsA = this.fallingshift.getBounds();
+    var boundsA = this.fallingShift.getBounds();
     var boundsB;
     
     function isOverlap(element, index, array) {
@@ -98,7 +108,7 @@ GameState.prototype.checkOverlap = function() {
         return Phaser.Rectangle.intersects(boundsA, boundsB);
     }
 
-    return this.shifts.some(checkOverlap);
+    return this.shifts.some(isOverlap);
 }
 
 
@@ -118,7 +128,8 @@ GameState.prototype.startDrag = function(sprite, pointer) {
   //sprite.body.moves = false;
 }
 GameState.prototype.stopDrag = function(sprite, pointer) {
-  //sprite.body.moves = true;
+  this.shiftAdd(sprite,pointer);
+  sprite.destroy(true);
 }
 GameState.prototype.buttons = function() {
   var date = "February 1st 2014"
