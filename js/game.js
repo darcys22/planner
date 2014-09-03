@@ -13,9 +13,12 @@ GameState.prototype.create = function() {
 };
 
 GameState.prototype.update = function() {
-  game.physics.arcade.collide(this.shifts,this.floor);
-  game.physics.arcade.collide(this.shifts);
-
+  if (checkOverlap())
+    {
+      this.boxTween.stop();
+      this.shifts.add(this.fallingShift);
+      this.fallingShift = null;
+    }
   
 };
 
@@ -35,10 +38,10 @@ game.state.add('game', GameState, true);
 
 GameState.prototype.setup = function()  {
   this.game.stage.backgroundColor = 0x333333;
-  this.game.physics.startSystem(Phaser.Physics.ARCADE);
-  this.game.physics.arcade.gravity.y = 200;
+  //this.game.physics.startSystem(Phaser.Physics.ARCADE);
+  //this.game.physics.arcade.gravity.y = 200;
   this.shifts = this.game.add.group();
-  this.game.input.onDown.add(this.shiftAdd, this);
+  //this.game.input.onDown.add(this.shiftAdd, this);
 
   this.box(71, 300, 4);
   this.ruler();
@@ -58,9 +61,9 @@ GameState.prototype.ruler = function() {
   rlrbdr.ctx.stroke();
 
   this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
-  game.physics.enable(this.floor, Phaser.Physics.ARCADE);
-  this.floor.body.immovable = true;
-  this.floor.body.moves = false;
+  //game.physics.enable(this.floor, Phaser.Physics.ARCADE);
+  //this.floor.body.immovable = true;
+  //this.floor.body.moves = false;
 
 }
 
@@ -70,17 +73,32 @@ GameState.prototype.box = function(x, y, size) {
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
   var box = this.game.add.sprite(x,y,bmd);
 
-  game.physics.arcade.enable(box);
+  //game.physics.arcade.enable(box);
   box.inputEnabled = true;
   box.input.enableDrag();
   box.input.enableSnap(71/2,40,true,false);
 
-  box.body.collideWorldBounds = true;
+  //box.body.collideWorldBounds = true;
 
   box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag, this);
 
-  this.shifts.add(box);
+  this.boxTween = this.game.add.tween(box).to({ y: this.game.height - 90},1000, Phaser.Easing.Linear.None, true)
+
+  this.fallingShift = box;
+}
+
+GameState.prototype.checkOverlap = function() {
+
+    var boundsA = this.fallingshift.getBounds();
+    var boundsB;
+    
+    function isOverlap(element, index, array) {
+        boundsB = element.getBounds();
+        return Phaser.Rectangle.intersects(boundsA, boundsB);
+    }
+
+    return this.shifts.some(checkOverlap);
 }
 
 
@@ -97,10 +115,10 @@ GameState.prototype.shiftAdd = function(sprite, pointer) {
   this.box(xpos, this.game.input.y, 4);
 }
 GameState.prototype.startDrag = function(sprite, pointer) {
-  sprite.body.moves = false;
+  //sprite.body.moves = false;
 }
 GameState.prototype.stopDrag = function(sprite, pointer) {
-  sprite.body.moves = true;
+  //sprite.body.moves = true;
 }
 GameState.prototype.buttons = function() {
   var date = "February 1st 2014"
