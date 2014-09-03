@@ -102,13 +102,14 @@ GameState.prototype.checkOverlap = function() {
 
     var boundsA = this.fallingShift.getBounds();
     var boundsB;
+    var ol = false
     
-    function isOverlap(element, index, array) {
+    function isOverlap(element) {
         boundsB = element.getBounds();
-        return Phaser.Rectangle.intersects(boundsA, boundsB);
+        ol = ol || Phaser.Rectangle.intersects(boundsA, boundsB);
     }
 
-    return this.shifts.some(isOverlap);
+    return this.shifts.forEach(isOverlap, this);
 }
 
 
