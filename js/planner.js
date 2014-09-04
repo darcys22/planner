@@ -49,10 +49,8 @@ game.state.add('game', GameState, true);
 
 GameState.prototype.setup = function()  {
   this.game.stage.backgroundColor = 0x333333;
-  //this.game.physics.startSystem(Phaser.Physics.ARCADE);
-  //this.game.physics.arcade.gravity.y = 200;
   this.shifts = this.game.add.group();
-  //this.game.input.onDown.add(this.shiftAdd, this);
+  this.input.justReleasedRate = 25;
 
   this.box(71, 300, 4);
   this.ruler();
@@ -147,7 +145,7 @@ GameState.prototype.buttons = function() {
   var tdate = game.add.text(10, 10, date, style);
 
   previus = this.game.add.button(10, 65, 'previous');
-  clear = this.game.add.button(10, 110, 'clear');
+  clear = this.game.add.button(10, 110, 'clear', this.shifts.removeAll);
 }
 
 
