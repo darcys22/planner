@@ -72,9 +72,6 @@ GameState.prototype.ruler = function() {
   rlrbdr.ctx.stroke();
 
   this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
-  //game.physics.enable(this.floor, Phaser.Physics.ARCADE);
-  //this.floor.body.immovable = true;
-  //this.floor.body.moves = false;
 
 }
 
@@ -84,12 +81,10 @@ GameState.prototype.box = function(x, y, size) {
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
   var box = this.game.add.sprite(x,y,bmd);
 
-  //game.physics.arcade.enable(box);
   box.inputEnabled = true;
   box.input.enableDrag();
   box.input.enableSnap(71/2,40,true,false);
 
-  //box.body.collideWorldBounds = true;
 
   box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag, this);
@@ -99,7 +94,9 @@ GameState.prototype.box = function(x, y, size) {
     this.fallingShift = null;
   }
 
-  this.boxTween = this.game.add.tween(box).to({ y: this.game.height - 90},1000, Phaser.Easing.Linear.None, true)
+  var speed = (this.game.height - 90 - box.y)*2;
+
+  this.boxTween = this.game.add.tween(box).to({ y: this.game.height - 90}, speed, Phaser.Easing.Linear.None, true)
   this.boxTween.onComplete.add(fallin, this);
 
   this.fallingShift = box;
@@ -111,6 +108,7 @@ GameState.prototype.checkOverlap = function() {
       return false
     }
     var boundsA = this.fallingShift.getBounds();
+    boundsA.inflate(-10, 4);
     var boundsB;
     var ol = false;
     
@@ -138,7 +136,6 @@ GameState.prototype.shiftAdd = function(sprite, pointer) {
   this.box(xpos, this.game.input.y, 4);
 }
 GameState.prototype.startDrag = function(sprite, pointer) {
-  //sprite.body.moves = false;
 }
 GameState.prototype.stopDrag = function(sprite, pointer) {
   this.shiftAdd(sprite,pointer);
