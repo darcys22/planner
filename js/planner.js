@@ -95,6 +95,7 @@ GameState.prototype.box = function(x, y, size) {
   box.events.onDragStop.add(this.stopDrag, this);
 
   function fallin() {
+    this.shifts.add(this.fallingShift);
     this.fallingShift = null;
   }
 
@@ -111,14 +112,16 @@ GameState.prototype.checkOverlap = function() {
     }
     var boundsA = this.fallingShift.getBounds();
     var boundsB;
-    var ol = false
+    var ol = false;
     
     function isOverlap(element) {
         boundsB = element.getBounds();
         ol = ol || Phaser.Rectangle.intersects(boundsA, boundsB);
     }
 
-    return this.shifts.forEach(isOverlap, this);
+    this.shifts.forEach(isOverlap, this);
+
+    return ol;
 }
 
 
