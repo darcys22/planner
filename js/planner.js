@@ -145,7 +145,10 @@ GameState.prototype.buttons = function() {
   var tdate = game.add.text(10, 10, date, style);
 
   previus = this.game.add.button(10, 65, 'previous');
-  clear = this.game.add.button(10, 110, 'clear', this.shifts.removeAll);
+  clear = this.game.add.button(10, 110, 'clear', this.clearBut);
+}
+GameState.prototype.clearBut = function() {
+  this.shifts.removeAll()
 }
 
 
