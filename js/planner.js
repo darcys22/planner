@@ -3,6 +3,7 @@ var GameState = function(game) {};
 GameState.prototype.preload = function() {
   game.load.image('clear','assets/clear.png');
   game.load.image('previous','assets/previous.png');
+  this.fallingShift = null;
 };
 
 var clear;
@@ -17,13 +18,13 @@ GameState.prototype.update = function() {
     {
       this.boxTween.stop();
       this.shifts.add(this.fallingShift);
-      this.fallingShift = false;
+      this.fallingShift = null;
     }
 
 
   if (game.input.mousePointer.justReleased()) 
     {
-      if (this.fallingShift)
+      if (this.fallingShift === null)
         {
           this.shiftAdd(null,null);
         }
@@ -93,13 +94,21 @@ GameState.prototype.box = function(x, y, size) {
   box.events.onDragStart.add(this.startDrag, this);
   box.events.onDragStop.add(this.stopDrag, this);
 
+  function fallin() {
+    this.fallingShift = null;
+  }
+
   this.boxTween = this.game.add.tween(box).to({ y: this.game.height - 90},1000, Phaser.Easing.Linear.None, true)
+  this.boxTween.onComplete.add(fallin, this);
 
   this.fallingShift = box;
 }
 
 GameState.prototype.checkOverlap = function() {
 
+    if (!this.fallingShift) {
+      return false
+    }
     var boundsA = this.fallingShift.getBounds();
     var boundsB;
     var ol = false
