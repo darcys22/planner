@@ -120,6 +120,21 @@ GameState.prototype.checkOverlap = function() {
     return ol;
 }
 
+GameState.prototype.concatArr = function(arr, shift) {
+  var empty = Array.apply(null, new Array(64)).map(Number.prototype.valueOf,0);
+  for (var i = shift.position; i < shift.position + shift.length; i++)
+  {
+    empty[i] = shift.id;
+  }
+  arr.push(empty);
+}
+
+GameState.prototype.Shift = function(id, position) {
+  this.position = position;
+  this.length = 8;
+  this.id = id;
+}
+
 
 ////////////////////////////////////////////////
 //
