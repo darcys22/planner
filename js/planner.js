@@ -4,6 +4,7 @@ GameState.prototype.preload = function() {
   game.load.image('clear','assets/clear.png');
   game.load.image('previous','assets/previous.png');
   this.fallingShift = null;
+  this.shiftGrid = [];
 };
 
 var clear;
@@ -120,13 +121,36 @@ GameState.prototype.checkOverlap = function() {
     return ol;
 }
 
+GameState.prototype.addShiftGrid = function(shift) {
+  position = this.checkGrid(shift);
+  if (position == -1) {
+    this.concatArr(this.shiftGrid, shift);
+  }
+  else {
+    this.ShiftGrid[position] = this.addShiftArray(this.ShiftGrid[position], shift)
+  }
+}
+
+GameState.prototype.checkGrid = function(shift) {
+  if (this.shiftGrid.length == 0) return -1;
+  return this.shiftGrid.findIndex(function(x) {
+    x.slice(shift.position, shift.position + shift.length).every(function(i) { i == 0 })
+  }.first);
+}
+
+
 GameState.prototype.concatArr = function(arr, shift) {
   var empty = Array.apply(null, new Array(64)).map(Number.prototype.valueOf,0);
+  this.addShiftArray(empty, shift)
+  arr.push(empty);
+}
+
+GameState.prototype.addShiftArray = function(arr, shift) {
   for (var i = shift.position; i < shift.position + shift.length; i++)
   {
-    empty[i] = shift.id;
+    arr[i] = shift.id;
   }
-  arr.push(empty);
+  return arr;
 }
 
 GameState.prototype.Shift = function(id, position) {
