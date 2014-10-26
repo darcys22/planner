@@ -77,7 +77,7 @@ GameState.prototype.ruler = function() {
 
 }
 
-GameState.prototype.box = function(x, y, size) {
+GameState.prototype.box = function(shift) {
   var bmd = this.game.add.bitmapData(shift.position/2 * SHIFT_SIZE, SHIFT_HEIGHT);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
@@ -99,7 +99,7 @@ GameState.prototype.box = function(x, y, size) {
 
   var speed = (this.game.height - 90 - box.y)*2;
 
-  this.boxTween = this.game.add.tween(box).to({ y: shift.height * SHIFT_HEIGHT}, speed, Phaser.Easing.Linear.None, true)
+  this.boxTween = this.game.add.tween(box).to({ y: (shift.height * SHIFT_HEIGHT + 90)}, speed, Phaser.Easing.Linear.None, true)
   this.boxTween.onComplete.add(fallin, this);
 
   this.fallingShift = box;
@@ -164,6 +164,7 @@ GameState.prototype.addShiftArray = function(arr, shift) {
 
 //Shift object
 Shift = function(hour) {
+  debugger;
   this.position = hour*2;
   this.length = 8;
   this.id = idCount;
@@ -184,7 +185,7 @@ GameState.prototype.shiftAdd = function(sprite, pointer) {
   var shift = new Shift(hour);
   shift.height = this.addShiftGrid(shift);
   var xpos = hour * 71
-  this.box(xpos, this.game.input.y, 4);
+  this.box(shift);
 }
 GameState.prototype.startDrag = function(sprite, pointer) {
 }
