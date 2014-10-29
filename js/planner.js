@@ -56,7 +56,6 @@ GameState.prototype.setup = function()  {
   this.shifts = this.game.add.group();
   this.input.justReleasedRate = 25;
 
-  this.box(71, 300, 4);
   this.ruler();
   this.buttons();
 
@@ -81,7 +80,7 @@ GameState.prototype.box = function(shift) {
   var bmd = this.game.add.bitmapData(shift.position/2 * SHIFT_SIZE, SHIFT_HEIGHT);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
-  var box = this.game.add.sprite(x,y,bmd);
+  var box = this.game.add.sprite(1,1,bmd);
   box.id = shift.id;
 
   box.inputEnabled = true;
@@ -164,12 +163,11 @@ GameState.prototype.addShiftArray = function(arr, shift) {
 
 //Shift object
 Shift = function(hour) {
-  debugger;
   this.position = hour*2;
   this.length = 8;
-  this.id = idCount;
+  this.id = this.idCount;
   this.height = null;
-  idCount++;
+  this.idCount++;
 }
 
 
