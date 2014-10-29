@@ -126,7 +126,7 @@ GameState.prototype.checkOverlap = function() {
 
 //takes a shift, adds it to the shiftgrid
 GameState.prototype.addShiftGrid = function(shift) {
-  position = this.checkGrid(shift);
+  var position = this.checkGrid(shift);
   if (position == -1) {
     this.concatArr(this.shiftGrid, shift);
     return this.shiftGrid.length;
@@ -182,7 +182,7 @@ GameState.prototype.shiftAdd = function(sprite, pointer) {
   var hour = Math.floor(this.game.input.x/71);
   var shift = new Shift(hour);
   shift.height = this.addShiftGrid(shift);
-  var xpos = hour * 71
+  var xpos = hour * 71;
   this.box(shift);
 }
 GameState.prototype.startDrag = function(sprite, pointer) {
