@@ -76,20 +76,20 @@ GameState.prototype.ruler = function() {
 
 }
 
-GameState.prototype.box = function(shift) {
+GameState.prototype.box = function(shift, originPointer) {
   var bmd = this.game.add.bitmapData(shift.position/2 * SHIFT_SIZE, SHIFT_HEIGHT);
   bmd.context.fillStyle = 'rgba(255, 0, 0, 0.3)';
   roundRect(bmd.ctx, 0, 0, bmd.width, bmd.height, 5, true);
-  var box = this.game.add.sprite(1,1,bmd);
-  box.id = shift.id;
+  var box = this.game.add.sprite(originPointer.x,originPointer.y,bmd);
+  //box.id = shift.id;
 
-  box.inputEnabled = true;
-  box.input.enableDrag();
-  box.input.enableSnap(SHIFT_SIZE/2, SHIFT_HEIGHT,true,false);
+  //box.inputEnabled = true;
+  //box.input.enableDrag();
+  //box.input.enableSnap(SHIFT_SIZE/2, SHIFT_HEIGHT,true,false);
 
 
-  box.events.onDragStart.add(this.startDrag, this);
-  box.events.onDragStop.add(this.stopDrag, this);
+  //box.events.onDragStart.add(this.startDrag, this);
+  //box.events.onDragStop.add(this.stopDrag, this);
 
   function fallin() {
     this.shifts.add(this.fallingShift);
@@ -183,7 +183,7 @@ GameState.prototype.shiftAdd = function(sprite, pointer) {
   var shift = new Shift(hour);
   shift.height = this.addShiftGrid(shift);
   var xpos = hour * 71;
-  this.box(shift);
+  this.box(shift, this.game.input);
 }
 GameState.prototype.startDrag = function(sprite, pointer) {
 }
