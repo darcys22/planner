@@ -8,6 +8,7 @@ GameState.prototype.preload = function() {
   this.fallingShift = null;
   this.shiftGrid = [];
   this.idCount = 1;
+  this.scrollStart = 0;
 };
 
 var clear;
@@ -98,7 +99,7 @@ GameState.prototype.box = function(shift, originPointer) {
 
   var speed = (this.game.height - 90 - box.y)*2;
 
-  this.boxTween = this.game.add.tween(box).to({ y: (shift.height * SHIFT_HEIGHT + 90)}, speed, Phaser.Easing.Linear.None, true)
+  this.boxTween = this.game.add.tween(box).to({ y: shift.ypos }, speed, Phaser.Easing.Linear.None, true)
   this.boxTween.onComplete.add(fallin, this);
 
   this.fallingShift = box;
@@ -168,6 +169,14 @@ Shift = function(hour) {
   this.id = this.idCount;
   this.height = null;
   this.idCount++;
+
+  this.ypos = function() {
+    return GameState.prototype.game.height - GameState.prototype.floor.height - (GameState.prototype.SHIFT_HEIGHT * this.height)
+  }
+
+  this.xpos = function() {
+    return (this.position - GameState.prototype.scrollStart) * (GameState.prototype.SHIFT_SIZE / 2)
+  }
 }
 
 
