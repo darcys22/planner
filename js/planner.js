@@ -1,13 +1,14 @@
+'use strict';
+
 var GameState = function(game) {};
 var SHIFT_SIZE = 71;
 var SHIFT_HEIGHT = 40;
 
+var Shift = require('shift');
+
 GameState.prototype.preload = function() {
   game.load.image('clear','assets/clear.png');
   game.load.image('previous','assets/previous.png');
-  this.fallingShift = null;
-  this.shiftGrid = [];
-  this.idCount = 1;
   this.scrollStart = 0;
 };
 
@@ -19,23 +20,10 @@ GameState.prototype.create = function() {
 };
 
 GameState.prototype.update = function() {
-  if (this.checkOverlap())
-    {
-      this.boxTween.stop();
-      this.shifts.add(this.fallingShift);
-      this.fallingShift = null;
-    }
-
-
   if (game.input.mousePointer.justReleased()) 
     {
-      if (this.fallingShift === null)
-        {
-          this.shiftAdd(null,null);
-        }
+      this.shiftAdd(null,null);
     }
-    
-  
 };
 
 GameState.prototype.render = function() {
@@ -48,56 +36,18 @@ GameState.prototype.render = function() {
 //
 //
 
-
 var game = new Phaser.Game(1136, 640, Phaser.AUTO);
 game.state.add('game', GameState, true);
 
 GameState.prototype.setup = function()  {
   this.game.stage.backgroundColor = 0x333333;
-  this.shifts = this.game.add.group();
+  this.shiftGrid = this.game.add.group();
   this.input.justReleasedRate = 25;
 
   this.ruler();
   this.buttons();
 
 }
-
-GameState.prototype.ruler = function() {
-
-  var rlrbdr = this.game.add.bitmapData(this.game.width, 50);
-  //rlrbdr context is a html5 canvas context so what you draw with that yeah
-  rlrbdr.ctx.strokeStyle = "#9CA2B8";
-  rlrbdr.ctx.lineWidth=5;
-  rlrbdr.ctx.beginPath();
-  rlrbdr.ctx.moveTo(0,0);
-  rlrbdr.ctx.lineTo(game.width,0);
-  rlrbdr.ctx.stroke();
-
-  this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
-
-}
-
-
-GameState.prototype.checkOverlap = function() {
-
-    if (!this.fallingShift) {
-      return false
-    }
-    var boundsA = this.fallingShift.getBounds();
-    boundsA.inflate(-10, 4);
-    var boundsB;
-    var ol = false;
-    
-    function isOverlap(element) {
-        boundsB = element.getBounds();
-        ol = ol || Phaser.Rectangle.intersects(boundsA, boundsB);
-    }
-
-    this.shifts.forEach(isOverlap, this);
-
-    return ol;
-}
-
 
 
 ////////////////////////////////////////////////
@@ -106,7 +56,11 @@ GameState.prototype.checkOverlap = function() {
 //
 //
 //
-
+Shift.prototype.shiftAdd = function(sprite, pointer) {
+  var hour = Math.floor(this.game.input.x/71);
+  var shift = new Shift(hour);
+  this.shiftGrid.add(shift);
+}
 GameState.prototype.buttons = function() {
   var date = "February 1st 2014"
   var style = { font: "40px Arial", fill: "#9CA2B8" };
@@ -118,7 +72,18 @@ GameState.prototype.buttons = function() {
 GameState.prototype.clearBut = function() {
   this.shifts.removeAll()
 }
+GameState.prototype.ruler = function() {
+  var rlrbdr = this.game.add.bitmapData(this.game.width, 50);
+  //rlrbdr context is a html5 canvas context so what you draw with that yeah
+  rlrbdr.ctx.strokeStyle = "#9CA2B8";
+  rlrbdr.ctx.lineWidth=5;
+  rlrbdr.ctx.beginPath();
+  rlrbdr.ctx.moveTo(0,0);
+  rlrbdr.ctx.lineTo(game.width,0);
+  rlrbdr.ctx.stroke();
 
+  this.floor = this.game.add.sprite(0,this.game.height-50,rlrbdr);
+}
 
 /**
  * Draws a rounded rectangle using the current state of the canvas. 
